@@ -1,4 +1,2 @@
-## License
-This project is publicly visible but not open source.  
-All rights reserved © 2025 Johnny Parker Lee.  
-You may not copy, modify, or distribute this code without permission.
+## Notes
+The point of this project is to showcase a variety of skills and demonstrate capabilities for employment and personal research. 
