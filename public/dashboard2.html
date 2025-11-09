@@ -17,24 +17,69 @@
         <a href="dashboard2.html">Dashboard 2</a>
         <a href="dashboard3.html">Dashboard 3</a>
       </nav>
-      <button id="theme-toggle" class="btn" aria-label="Toggle theme">Theme</button>
-      <button id="menu-toggle" class="btn" aria-label="Toggle menu">Menu</button>
     </div>
   </header>
 
   <main class="container">
     <section class="hero">
-      <h1>Dashboard 2</h1>
-      <p class="sub">Add your second set of panels, charts, or tables.</p>
+      <h1>📊 My Tableau Dashboard</h1>
+      <p class="sub">Embedded from Tableau Public • responsive sizing</p>
     </section>
 
-    <section class="grid section">
-      <div class="card"><h3>Panel 1</h3><p>Content placeholder.</p></div>
-      <div class="card"><h3>Panel 2</h3><p>Content placeholder.</p></div>
-      <div class="card"><h3>Panel 3</h3><p>Content placeholder.</p></div>
+    <section class="embed-card">
+      <div class="tableauPlaceholder" id="viz1">
+        <noscript>
+          <a href="#">
+            <img alt="Tableau static preview"
+                 src="https://public.tableau.com/static/images/Sp/Sportswearbusiness/Dashboard1/1.png"
+                 style="border:none" />
+          </a>
+        </noscript>
+        <object class="tableauViz" style="display:none;">
+          <param name="host_url" value="https%3A%2F%2Fpublic.tableau.com%2F" />
+          <param name="embed_code_version" value="3" />
+          <param name="site_root" value="" />
+          <param name="name" value="Sportswearbusiness/Dashboard1" />
+          <param name="tabs" value="yes" />
+          <param name="toolbar" value="yes" />
+          <param name="static_image" value="https://public.tableau.com/static/images/Sp/Sportswearbusiness/Dashboard1/1.png" />
+          <param name="animate_transition" value="yes" />
+          <param name="display_static_image" value="yes" />
+          <param name="display_spinner" value="yes" />
+          <param name="display_overlay" value="yes" />
+          <param name="display_count" value="yes" />
+          <param name="language" value="en-US" />
+        </object>
+      </div>
     </section>
   </main>
 
+  <script>
+    (function() {
+      const div = document.getElementById('viz1');
+      const obj = div.getElementsByTagName('object')[0];
+
+      function sizeViz() {
+        const w = div.offsetWidth;
+        if (w > 800) {
+          obj.style.width = '100%';
+          obj.style.height = Math.round(w * 0.62) + 'px';
+        } else if (w > 500) {
+          obj.style.width = '100%';
+          obj.style.height = Math.round(w * 0.75) + 'px';
+        } else {
+          obj.style.width = '100%';
+          obj.style.height = Math.round(w * 1.2) + 'px';
+        }
+      }
+      sizeViz();
+      window.addEventListener('resize', sizeViz, { passive: true });
+
+      const s = document.createElement('script');
+      s.src = 'https://public.tableau.com/javascripts/api/viz_v1.js';
+      obj.parentNode.insertBefore(s, obj);
+    })();
+  </script>
   <script src="app.js"></script>
 </body>
 </html>
