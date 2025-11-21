@@ -1,4 +1,8 @@
-// ===== Mock users (demo only) =====
+// =====================
+// auth.js  (GitHub Pages mock auth)
+// =====================
+
+// Mock users (demo only – NOT secure)
 const MOCK_USERS = [
   {
     username: "admin",
@@ -15,7 +19,8 @@ const MOCK_USERS = [
 ];
 
 
-// ===== Helpers to manage auth state in localStorage =====
+// ===== LocalStorage helpers =====
+
 function setCurrentUser(user) {
   localStorage.setItem("currentUser", JSON.stringify(user));
 }
@@ -30,10 +35,15 @@ function clearCurrentUser() {
 }
 
 
+// ===== Core auth functions =====
+
+// Called from login.html
+// Returns: { success: boolean, message?: string, redirectTo?: string }
 function login(username, password) {
   const user = MOCK_USERS.find(
     (u) => u.username === username && u.password === password
   );
+
   if (!user) {
     return { success: false, message: "Invalid username or password." };
   }
@@ -44,9 +54,10 @@ function login(username, password) {
     role: user.role,
     dashboards: Array.isArray(user.dashboards) ? user.dashboards : []
   };
+
   setCurrentUser(storedUser);
 
-  // Decide where they should go first
+  // Decide first dashboard they should see
   const firstDashboard =
     storedUser.dashboards.length > 0
       ? storedUser.dashboards[0]
@@ -65,6 +76,8 @@ function logout() {
 
 
 // ===== Guards =====
+
+// Basic: just require any logged-in user
 function requireLogin() {
   const user = getCurrentUser();
   if (!user) {
@@ -72,6 +85,7 @@ function requireLogin() {
   }
 }
 
+// Only allow admins
 function requireAdmin() {
   const user = getCurrentUser();
   if (!user || user.role !== "admin") {
@@ -79,25 +93,31 @@ function requireAdmin() {
   }
 }
 
+// Per-dashboard access control
 function requireDashboardAccess(pageName) {
   const user = getCurrentUser();
+
   if (!user) {
     window.location.href = "login.html";
     return;
   }
 
-  if (!Array.isArray(user.dashboards) || !user.dashboards.includes(pageName)) {
+  const dashboards = Array.isArray(user.dashboards) ? user.dashboards : [];
+
+  if (!dashboards.includes(pageName)) {
     alert("You do not have permission to access this dashboard.");
+
     const fallback =
-      Array.isArray(user.dashboards) && user.dashboards.length
-        ? user.dashboards[0]
-        : "login.html";
+      dashboards.length > 0 ? dashboards[0] : "login.html";
+
     window.location.href = fallback;
   }
 }
 
 
 // ===== Nav / UI wiring =====
+
+// Called on DOMContentLoaded on pages that include the nav
 function updateNavAuthState() {
   const user = getCurrentUser();
 
@@ -117,10 +137,12 @@ function updateNavAuthState() {
 
   // Hide dashboard links user doesn't have access to
   const dashboardLinks = document.querySelectorAll("[data-dashboard]");
+  const dashboards = user && Array.isArray(user.dashboards) ? user.dashboards : [];
+
   dashboardLinks.forEach((link) => {
     const page = link.getAttribute("data-dashboard");
 
-    if (!user || !Array.isArray(user.dashboards) || !user.dashboards.includes(page)) {
+    if (!user || !dashboards.includes(page)) {
       link.style.display = "none";
     } else {
       link.style.display = "inline-block";
@@ -128,5 +150,6 @@ function updateNavAuthState() {
   });
 }
 
-// Run once DOM is ready on each page that includes the nav
+
+// Run when DOM is ready (for pages that include this file)
 document.addEventListener("DOMContentLoaded", updateNavAuthState);
