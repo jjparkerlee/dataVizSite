@@ -30,7 +30,6 @@ function clearCurrentUser() {
 }
 
 
-// ===== Core auth functions =====
 function login(username, password) {
   const user = MOCK_USERS.find(
     (u) => u.username === username && u.password === password
@@ -40,13 +39,23 @@ function login(username, password) {
   }
 
   // Store full user (without password)
-  setCurrentUser({
+  const storedUser = {
     username: user.username,
     role: user.role,
-    dashboards: user.dashboards || []
-  });
+    dashboards: Array.isArray(user.dashboards) ? user.dashboards : []
+  };
+  setCurrentUser(storedUser);
 
-  return { success: true };
+  // Decide where they should go first
+  const firstDashboard =
+    storedUser.dashboards.length > 0
+      ? storedUser.dashboards[0]
+      : "dashboard1.html";
+
+  return {
+    success: true,
+    redirectTo: firstDashboard
+  };
 }
 
 function logout() {
