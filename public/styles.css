@@ -38,11 +38,16 @@ body::before {
   pointer-events: none;
   z-index: -1;
   background:
-    linear-gradient(180deg, rgba(255,255,255,0.35), rgba(0,0,0,0.08)),
-    url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M/wHwACMQGQ2D4nJwAAAABJRU5ErkJggg==");
-  opacity: 0.35;
-  mix-blend-mode: multiply;
+    repeating-linear-gradient(
+      120deg,
+      rgba(122, 92, 58, 0.08) 0px,
+      rgba(122, 92, 58, 0.08) 2px,
+      transparent 2px,
+      transparent 12px
+    );
+  opacity: 0.18;
 }
+
 
 /* Demo banner */
 .demo-banner{
